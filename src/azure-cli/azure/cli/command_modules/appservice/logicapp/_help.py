@@ -7,12 +7,16 @@ from knack.help_files import helps
 
 # pylint: disable=line-too-long
 
-helps['logicapp'] = """
+helps[
+    "logicapp"
+] = """
 type: group
 short-summary: Manage logic apps.
 """
 
-helps['logicapp create'] = """
+helps[
+    "logicapp create"
+] = """
 type: command
 short-summary: Create a logic app.
 long-summary: The logic app's name must be able to produce a unique FQDN as AppName.azurewebsites.net.
@@ -22,7 +26,9 @@ examples:
         az logicapp create -g MyResourceGroup --subscription MySubscription -p MyPlan -n MyUniqueAppName -s MyStorageAccount
 """
 
-helps['logicapp delete'] = """
+helps[
+    "logicapp delete"
+] = """
 type: command
 short-summary: Delete a logic app.
 examples:
@@ -30,7 +36,9 @@ examples:
     text: az logicapp delete --name MyLogicapp --resource-group MyResourceGroup --subscription MySubscription
 """
 
-helps['logicapp show'] = """
+helps[
+    "logicapp show"
+] = """
 type: command
 short-summary: Get the details of a logic app.
 examples:
@@ -38,7 +46,9 @@ examples:
     text: az logicapp show --name MyLogicapp --resource-group MyResourceGroup --subscription MySubscription
 """
 
-helps['logicapp list'] = """
+helps[
+    "logicapp list"
+] = """
 type: command
 short-summary: List logic apps.
 examples:
@@ -50,7 +60,9 @@ examples:
         az logicapp list --query "[?state=='Running']"
 """
 
-helps['logicapp restart'] = """
+helps[
+    "logicapp restart"
+] = """
 type: command
 short-summary: Restart a logic app.
 examples:
@@ -59,7 +71,9 @@ examples:
     crafted: true
 """
 
-helps['logicapp start'] = """
+helps[
+    "logicapp start"
+] = """
 type: command
 short-summary: Start a logic app.
 examples:
@@ -68,7 +82,9 @@ examples:
     crafted: true
 """
 
-helps['logicapp stop'] = """
+helps[
+    "logicapp stop"
+] = """
 type: command
 short-summary: Stop a logic app.
 examples:
