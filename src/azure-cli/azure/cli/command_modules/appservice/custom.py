@@ -2484,11 +2484,11 @@ def restore_snapshot(
     name,
     time,
     slot=None,
-    restore_content_only=False,  # pylint: disable=redefined-outer-name
+    restore_content_only=False,
     source_resource_group=None,
     source_name=None,
     source_slot=None,
-):
+):  # pylint: disable=redefined-outer-name
     from azure.cli.core.commands.client_factory import get_subscription_id
 
     SnapshotRecoverySource, SnapshotRestoreRequest = cmd.get_models("SnapshotRecoverySource", "SnapshotRestoreRequest")

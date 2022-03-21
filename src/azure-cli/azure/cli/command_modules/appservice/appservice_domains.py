@@ -23,12 +23,12 @@ def create_domain(
     hostname,
     contact_info,
     privacy=True,
-    auto_renew=True,  # pylint: disable=too-many-locals
+    auto_renew=True,
     accept_terms=False,
     tags=None,
     dryrun=False,
     no_wait=False,
-):
+):  # pylint: disable=too-many-locals
     from azure.cli.core.commands.arm import ArmTemplateBuilder
     from azure.cli.command_modules.appservice._template_builder import build_dns_zone, build_domain
     from datetime import datetime
@@ -188,6 +188,7 @@ def show_domain_purchase_terms(cmd, hostname):
     domain_agreement_option = TopLevelDomainAgreementOption(include_privacy=True, for_transfer=True)
     agreements = web_client.top_level_domains.list_agreements(name=tld, agreement_option=domain_agreement_option)
 
+    # pylint: disable=line-too-long
     terms = {
         "hostname": hostname,
         "hostname_available": hostname_availability.available,
