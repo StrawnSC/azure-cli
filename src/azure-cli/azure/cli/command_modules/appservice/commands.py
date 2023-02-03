@@ -8,10 +8,9 @@ from azure.cli.core.commands import CliCommandType
 from azure.cli.core.util import empty_on_404
 
 from ._client_factory import cf_web_client, cf_plans, cf_webapps
-from ._validators import (validate_onedeploy_params, validate_staticsite_link_function, validate_staticsite_sku,
-                          validate_vnet_integration, validate_asp_create, validate_functionapp_asp_create,
-                          validate_webapp_up, validate_app_exists, validate_add_vnet, validate_app_is_functionapp,
-                          validate_app_is_webapp)
+from ._validators import (validate_onedeploy_params, validate_vnet_integration, validate_asp_create,
+                          validate_functionapp_asp_create, validate_webapp_up, validate_app_exists, validate_add_vnet,
+                          validate_app_is_functionapp, validate_app_is_webapp)
 
 
 def output_slots_in_table(slots):
@@ -112,8 +111,6 @@ def load_command_table(self, _):
     webapp_access_restrictions = CliCommandType(operations_tmpl='azure.cli.command_modules.appservice.access_restrictions#{}')
 
     appservice_environment = CliCommandType(operations_tmpl='azure.cli.command_modules.appservice.appservice_environment#{}')
-
-    staticsite_sdk = CliCommandType(operations_tmpl='azure.cli.command_modules.appservice.static_sites#{}')
 
     appservice_domains = CliCommandType(operations_tmpl='azure.cli.command_modules.appservice.appservice_domains#{}')
 
@@ -446,62 +443,6 @@ def load_command_table(self, _):
     with self.command_group('appservice domain', custom_command_type=appservice_domains, is_preview=True) as g:
         g.custom_command('create', 'create_domain')
         g.custom_command('show-terms', 'show_domain_purchase_terms')
-
-    with self.command_group('staticwebapp', custom_command_type=staticsite_sdk) as g:
-        g.custom_command('list', 'list_staticsites')
-        g.custom_show_command('show', 'show_staticsite')
-        g.custom_command('create', 'create_staticsites', supports_no_wait=True, exception_handler=ex_handler_factory())
-        g.custom_command('delete', 'delete_staticsite', supports_no_wait=True, confirmation=True)
-        g.custom_command('disconnect', 'disconnect_staticsite', supports_no_wait=True)
-        g.custom_command('reconnect', 'reconnect_staticsite', supports_no_wait=True)
-        g.custom_command('update', 'update_staticsite', supports_no_wait=True)
-
-    with self.command_group('staticwebapp environment', custom_command_type=staticsite_sdk) as g:
-        g.custom_command('list', 'list_staticsite_environments')
-        g.custom_show_command('show', 'show_staticsite_environment')
-        g.custom_command('functions', 'list_staticsite_functions')
-        g.custom_command('delete', 'delete_staticsite_environment', confirmation=True)
-
-    with self.command_group('staticwebapp hostname', custom_command_type=staticsite_sdk) as g:
-        g.custom_command('list', 'list_staticsite_domains')
-        g.custom_command('set', 'set_staticsite_domain', supports_no_wait=True, exception_handler=ex_handler_factory())
-        g.custom_command('delete', 'delete_staticsite_domain', supports_no_wait=True, confirmation=True)
-        g.custom_show_command('show', 'get_staticsite_domain')
-
-    with self.command_group('staticwebapp identity', custom_command_type=staticsite_sdk) as g:
-        g.custom_command('assign', 'assign_identity', exception_handler=ex_handler_factory())
-        g.custom_command('remove', 'remove_identity', confirmation=True)
-        g.custom_show_command('show', 'show_identity')
-
-    with self.command_group('staticwebapp appsettings', custom_command_type=staticsite_sdk) as g:
-        g.custom_command('list', 'list_staticsite_app_settings')
-        g.custom_command('set', 'set_staticsite_app_settings')
-        g.custom_command('delete', 'delete_staticsite_app_settings')
-
-    with self.command_group('staticwebapp users', custom_command_type=staticsite_sdk) as g:
-        g.custom_command('list', 'list_staticsite_users')
-        g.custom_command('invite', 'invite_staticsite_users')
-        g.custom_command('update', 'update_staticsite_users')
-
-    with self.command_group('staticwebapp secrets', custom_command_type=staticsite_sdk) as g:
-        g.custom_command('list', 'list_staticsite_secrets')
-        g.custom_command('reset-api-key', 'reset_staticsite_api_key', supports_no_wait=True)
-
-    with self.command_group('staticwebapp functions', custom_command_type=staticsite_sdk) as g:
-        g.custom_command('link', 'link_user_function', validator=validate_staticsite_link_function)
-        g.custom_command('unlink', 'unlink_user_function', validator=validate_staticsite_sku)
-        g.custom_show_command('show', 'get_user_function', validator=validate_staticsite_sku)
-
-    with self.command_group('staticwebapp backends', custom_command_type=staticsite_sdk) as g:
-        g.custom_command('validate', 'validate_backend', validator=validate_staticsite_sku, exception_handler=ex_handler_factory())
-        g.custom_command('link', 'link_backend', validator=validate_staticsite_sku, exception_handler=ex_handler_factory())
-        g.custom_command('unlink', 'unlink_backend', validator=validate_staticsite_sku, exception_handler=ex_handler_factory())
-        g.custom_show_command('show', 'get_backend', validator=validate_staticsite_sku)
-
-    with self.command_group('staticwebapp enterprise-edge', custom_command_type=staticsite_sdk) as g:
-        g.custom_command('enable', 'enable_staticwebapp_enterprise_edge')
-        g.custom_command('disable', 'disable_staticwebapp_enterprise_edge')
-        g.custom_show_command('show', 'show_staticwebapp_enterprise_edge_status')
 
     with self.command_group('logicapp') as g:
         g.custom_command('delete', 'delete_logic_app', confirmation=True)

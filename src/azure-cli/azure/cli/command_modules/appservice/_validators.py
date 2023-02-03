@@ -287,12 +287,6 @@ def _validate_service_tag_existence(cmd, namespace):
                                      'Cannot add duplicate Service Tag values.')
 
 
-def validate_public_cloud(cmd):
-    from azure.cli.core.cloud import AZURE_PUBLIC_CLOUD
-    if cmd.cli_ctx.cloud.name != AZURE_PUBLIC_CLOUD.name:
-        raise ValidationError('This command is not yet supported on soveriegn clouds.')
-
-
 def validate_staticsite_sku(cmd, namespace):
     from azure.mgmt.web import WebSiteManagementClient
     client = get_mgmt_service_client(cmd.cli_ctx, WebSiteManagementClient).static_sites

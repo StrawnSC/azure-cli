@@ -113,14 +113,6 @@ def get_resource_if_exists(resource, **kwargs):
         return None
 
 
-def normalize_sku_for_staticapp(sku):
-    if sku.lower() == 'free':
-        return 'Free'
-    if sku.lower() == 'standard':
-        return 'Standard'
-    raise ValidationError("Invalid sku(pricing tier), please refer to command help for valid values")
-
-
 def retryable_method(retries=3, interval_sec=5, excpt_type=Exception):
     def decorate(func):
         def call(*args, **kwargs):
@@ -186,6 +178,7 @@ def _get_location_from_webapp(client, resource_group_name, webapp):
     return webapp.location
 
 
+# TODO remove this -- the builtin CLI location param type already normalizes
 # can't just normalize locations with location.lower().replace(" ", "") because of UAE/UK regions
 def _normalize_location(cmd, location):
     location = location.lower()

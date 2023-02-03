@@ -16,8 +16,8 @@ from urllib.parse import urlparse
 import uuid
 from datetime import datetime, timedelta
 
-from .utils import normalize_sku_for_staticapp, raise_missing_token_suggestion, raise_missing_ado_token_suggestion
-from .custom import show_app, _build_identities_info
+from ._utils import (normalize_sku_for_staticapp, raise_missing_token_suggestion, raise_missing_ado_token_suggestion,
+                     build_identities_info, get_appservice_app)
 from ._client_factory import providers_client_factory
 
 
@@ -174,7 +174,7 @@ def assign_identity(cmd, resource_group_name, name, assign_identities=None, role
     ManagedServiceIdentity, ResourceIdentityType = cmd.get_models('ManagedServiceIdentity',
                                                                   'ManagedServiceIdentityType')
     UserAssignedIdentitiesValue = cmd.get_models('UserAssignedIdentity')
-    _, _, external_identities, enable_local_identity = _build_identities_info(assign_identities)
+    _, _, external_identities, enable_local_identity = build_identities_info(assign_identities)
 
     def getter():
         client = _get_staticsites_client_factory(cmd.cli_ctx)
@@ -217,7 +217,7 @@ def assign_identity(cmd, resource_group_name, name, assign_identities=None, role
 def remove_identity(cmd, resource_group_name, name, remove_identities=None):
     IdentityType = cmd.get_models('ManagedServiceIdentityType')
     UserAssignedIdentitiesValue = cmd.get_models('Components1Jq1T4ISchemasManagedserviceidentityPropertiesUserassignedidentitiesAdditionalproperties')  # pylint: disable=line-too-long
-    _, _, external_identities, remove_local_identity = _build_identities_info(remove_identities)
+    _, _, external_identities, remove_local_identity = build_identities_info(remove_identities)
 
     def getter():
         client = _get_staticsites_client_factory(cmd.cli_ctx)
@@ -623,7 +623,7 @@ def link_user_function(
     parsed_rid = parse_resource_id(function_resource_id)
     function_name = parsed_rid["name"]
     function_group = parsed_rid["resource_group"]
-    function_location = show_app(cmd, resource_group_name=function_group, name=function_name).location
+    function_location = get_appservice_app(cmd, resource_group_name=function_group, name=function_name).location
 
     client = _get_staticsites_client_factory(cmd.cli_ctx)
     function = StaticSiteUserProvidedFunctionAppARMResource(function_app_resource_id=function_resource_id,

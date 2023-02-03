@@ -6,7 +6,7 @@ import unittest
 from unittest import mock
 from knack.util import CLIError
 
-from azure.cli.command_modules.appservice.static_sites import \
+from azure.cli.command_modules.staticwebapp.custom import \
     list_staticsites, show_staticsite, delete_staticsite, create_staticsites, disconnect_staticsite, \
     reconnect_staticsite, list_staticsite_environments, show_staticsite_environment, list_staticsite_domains, \
     set_staticsite_domain, delete_staticsite_domain, list_staticsite_functions, list_staticsite_app_settings, \
@@ -97,7 +97,7 @@ class TestStaticAppCommands(unittest.TestCase):
         output_location = '/.git/'
         tags = {'key1': 'value1'}
 
-        with mock.patch("azure.cli.command_modules.appservice.static_sites.show_staticsite", side_effect=[ResourceNotFoundError("msg"), None]):
+        with mock.patch("azure.cli.command_modules.staticwebapp.custom.show_staticsite", side_effect=[ResourceNotFoundError("msg"), None]):
             create_staticsites(
                 self.mock_cmd, self.rg1, self.name1, self.location1,
                 self.source1, self.branch1, self.token1,
@@ -131,8 +131,8 @@ class TestStaticAppCommands(unittest.TestCase):
         from azure.mgmt.web.models import StaticSiteARMResource, StaticSiteBuildProperties, SkuDescription
         self.mock_cmd.get_models.return_value = StaticSiteARMResource, StaticSiteBuildProperties, SkuDescription
 
-        with mock.patch("azure.cli.command_modules.appservice.static_sites.show_staticsite", side_effect=[ResourceNotFoundError("msg"), None]):
-            with mock.patch('azure.cli.command_modules.appservice.static_sites._get_ado_token', autospec=True):
+        with mock.patch("azure.cli.command_modules.staticwebapp.custom.show_staticsite", side_effect=[ResourceNotFoundError("msg"), None]):
+            with mock.patch('azure.cli.command_modules.staticwebapp.custom._get_ado_token', autospec=True):
                 create_staticsites(
                     self.mock_cmd, self.rg1, self.name1, self.location1,
                     self.source_ado, self.branch1, login_with_ado=True)
@@ -151,7 +151,7 @@ class TestStaticAppCommands(unittest.TestCase):
         from azure.mgmt.web.models import StaticSiteARMResource, StaticSiteBuildProperties, SkuDescription
         self.mock_cmd.get_models.return_value = StaticSiteARMResource, StaticSiteBuildProperties, SkuDescription
 
-        with mock.patch("azure.cli.command_modules.appservice.static_sites.show_staticsite", side_effect=[ResourceNotFoundError("msg"), None]):
+        with mock.patch("azure.cli.command_modules.staticwebapp.custom.show_staticsite", side_effect=[ResourceNotFoundError("msg"), None]):
             create_staticsites(
                 self.mock_cmd, self.rg1, self.name1, self.location1,
                 self.source1, self.branch1, self.token1, sku='standard')
@@ -167,7 +167,7 @@ class TestStaticAppCommands(unittest.TestCase):
         tags = {'key1': 'value1'}
 
         with self.assertRaises(CLIError):
-            with mock.patch("azure.cli.command_modules.appservice.static_sites.show_staticsite", side_effect=ResourceNotFoundError("msg")):
+            with mock.patch("azure.cli.command_modules.staticwebapp.custom.show_staticsite", side_effect=ResourceNotFoundError("msg")):
                 create_staticsites(
                     self.mock_cmd, self.rg1, self.name1, self.location1,
                     self.source1, self.branch1,
@@ -231,7 +231,7 @@ class TestStaticAppCommands(unittest.TestCase):
 
         self.staticapp_client.begin_detach_static_site.assert_called_once_with(resource_group_name=self.rg1, name=self.name1)
 
-    @mock.patch('azure.cli.command_modules.appservice.static_sites.create_staticsites', autospec=True)
+    @mock.patch('azure.cli.command_modules.staticwebapp.custom.create_staticsites', autospec=True)
     def test_reconnect_staticapp_with_resourcegroup(self, create_staticsites_mock):
         self.staticapp_client.list.return_value = [self.app1, self.app2]
 
@@ -241,7 +241,7 @@ class TestStaticAppCommands(unittest.TestCase):
         create_staticsites_mock.assert_called_once_with(self.mock_cmd, self.rg1, self.name1, self.location1,
                                                         self.source1, self.branch1, self.token1, login_with_github=False, no_wait=False)
 
-    @mock.patch('azure.cli.command_modules.appservice.static_sites.create_staticsites', autospec=True)
+    @mock.patch('azure.cli.command_modules.staticwebapp.custom.create_staticsites', autospec=True)
     def test_reconnect_staticapp_without_resourcegroup(self, create_staticsites_mock):
         self.staticapp_client.list.return_value = [self.app1, self.app2]
 
@@ -613,7 +613,7 @@ class TestStaticAppCommands(unittest.TestCase):
         reset_envelope = literal_eval(self.staticapp_client.reset_static_site_api_key.call_args[1]["reset_properties_envelope"].__str__())
         self.assertEqual(reset_envelope["repository_token"], self.token1)
 
-    @mock.patch("azure.cli.command_modules.appservice.static_sites.show_app")
+    @mock.patch("azure.cli.command_modules.staticwebapp.custom.get_appservice_app")
     def test_functions_link(self, *args, **kwargs):
         functionapp_name = "functionapp"
         functionapp_resource_id = "/subscriptions/sub/resourceGroups/{}/providers/Microsoft.Web/sites/{}".format(
@@ -623,7 +623,7 @@ class TestStaticAppCommands(unittest.TestCase):
 
         self.staticapp_client.begin_register_user_provided_function_app_with_static_site.assert_called_once()
 
-    @mock.patch("azure.cli.command_modules.appservice.static_sites.show_app")
+    @mock.patch("azure.cli.command_modules.staticwebapp.custom.get_appservice_app")
     def test_functions_link_with_environment(self, *args, **kwargs):
         functionapp_name = "functionapp"
         functionapp_resource_id = "/subscriptions/sub/resourceGroups/{}/providers/Microsoft.Web/sites/{}".format(
@@ -633,7 +633,7 @@ class TestStaticAppCommands(unittest.TestCase):
 
         self.staticapp_client.begin_register_user_provided_function_app_with_static_site_build.assert_called_once()
 
-    @mock.patch("azure.cli.command_modules.appservice.static_sites.get_user_function", return_value=[mock.MagicMock()])
+    @mock.patch("azure.cli.command_modules.staticwebapp.custom.get_user_function", return_value=[mock.MagicMock()])
     def test_functions_unlink(self, *args, **kwargs):
         unlink_user_function(self.mock_cmd, self.name1, self.rg1)
 
@@ -662,7 +662,7 @@ class TestStaticAppCommands(unittest.TestCase):
 
         self.staticapp_client.begin_link_backend_to_build.assert_called_once()
 
-    @mock.patch("azure.cli.command_modules.appservice.static_sites.get_backend", return_value=[mock.MagicMock()])
+    @mock.patch("azure.cli.command_modules.staticwebapp.custom.get_backend", return_value=[mock.MagicMock()])
     def test_backends_unlink(self, *args, **kwargs):
         unlink_backend(self.mock_cmd, self.name1, self.rg1)
 
@@ -699,7 +699,7 @@ def _set_up_client_mock(self):
     self.staticapp_client = mock.MagicMock()
 
     client_factory_patcher = mock.patch(
-        'azure.cli.command_modules.appservice.static_sites._get_staticsites_client_factory', autospec=True)
+        'azure.cli.command_modules.staticwebapp.custom._get_staticsites_client_factory', autospec=True)
     self.addCleanup(client_factory_patcher.stop)
     self.mock_static_site_client_factory = client_factory_patcher.start()
     self.mock_static_site_client_factory.return_value = self.staticapp_client
