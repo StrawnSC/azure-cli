@@ -61,13 +61,8 @@ def load_arguments(self, _):
                                                 local_context_attribute=LocalContextAttribute(name='functionapp_name',
                                                                                               actions=[
                                                                                                   LocalContextAction.GET]))
-    logicapp_name_arg_type = CLIArgumentType(options_list=['--name', '-n'], metavar='NAME',
-                                             help="name of the logic app.",
-                                             local_context_attribute=LocalContextAttribute(name='logicapp_name',
-                                                                                           actions=[LocalContextAction.GET]))
     name_arg_type_dict = {
         'functionapp': functionapp_name_arg_type,
-        'logicapp': logicapp_name_arg_type
     }
     isolated_sku_arg_type = CLIArgumentType(
         help='The Isolated pricing tiers, e.g., I1 (Isolated Small), I2 (Isolated Medium), I3 (Isolated Large)',
@@ -217,7 +212,7 @@ subscription than the app service environment, please use the resource ID for --
     with self.argument_context('webapp webjob triggered list') as c:
         c.argument('name', arg_type=webapp_name_arg_type, id_part=None)
 
-    for scope in ['webapp', 'functionapp', 'logicapp']:
+    for scope in ['webapp', 'functionapp']:
         with self.argument_context(scope + ' create') as c:
             c.argument('deployment_container_image_name', options_list=['--deployment-container-image-name', '-i'],
                        help='Container image name from Docker Hub, e.g. publisher/image-name:tag')
@@ -707,7 +702,7 @@ subscription than the app service environment, please use the resource ID for --
         c.argument('skip_delegation_check', help="Skip check if you do not have permission or the VNet is in another subscription.",
                    arg_type=get_three_state_flag(return_label=True))
 
-    for scope in ['functionapp', 'logicapp']:
+    for scope in ['functionapp']:
         app_type = scope[:-3]  # 'function' or 'logic'
         with self.argument_context(scope) as c:
             c.ignore('app_instance')
@@ -755,41 +750,6 @@ subscription than the app service environment, please use the resource ID for --
 
     with self.argument_context('functionapp config appsettings') as c:
         c.argument('slot_settings', nargs='+', help="space-separated slot app settings in a format of `<name>=<value>`")
-
-    with self.argument_context('logicapp') as c:
-        c.argument('name', arg_type=logicapp_name_arg_type)
-
-    with self.argument_context('logicapp show') as c:
-        c.argument('name', arg_type=logicapp_name_arg_type)
-
-    with self.argument_context('logicapp delete') as c:
-        c.argument('name', arg_type=logicapp_name_arg_type, local_context_attribute=None)
-
-    with self.argument_context('logicapp update') as c:
-        c.argument('plan', help='The name or resource id of the plan to update the logicapp with.')
-        c.ignore('force')
-
-    with self.argument_context('logicapp deployment source config-zip') as c:
-        c.argument('src', help='a zip file path for deployment')
-        c.argument('build_remote', help='enable remote build during deployment',
-                   arg_type=get_three_state_flag(return_label=True))
-        c.argument('timeout', type=int, options_list=['--timeout', '-t'],
-                   help='Configurable timeout in seconds for checking the status of deployment',
-                   validator=validate_timeout_value)
-
-    with self.argument_context('logicapp config appsettings') as c:
-        c.argument('settings', nargs='+', help="space-separated app settings in a format of `<name>=<value>`")
-        c.argument('setting_names', nargs='+', help="space-separated app setting names")
-        c.argument('slot_settings', nargs='+', help="space-separated slot app settings in a format of `<name>=<value>`")
-
-    with self.argument_context('logicapp config appsettings list') as c:
-        c.argument('name', arg_type=logicapp_name_arg_type, id_part=None)
-
-    with self.argument_context('logicapp scale') as c:
-        c.argument('minimum_instance_count', options_list=['--min-instances'], type=int,
-                   help='The number of instances that are always ready and warm for this logic app.')
-        c.argument('maximum_instance_count', options_list=['--max-instances'], type=int,
-                   help='The maximum number of instances this logic app can scale out to under load.')
 
     with self.argument_context('functionapp plan') as c:
         c.argument('name', arg_type=name_arg_type, help='The name of the app service plan',

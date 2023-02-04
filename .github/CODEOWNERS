@@ -65,3 +65,4 @@
 /src/azure-cli/azure/cli/command_modules/util/ @jiasli @zhoxing-ms @evelyn-ys
 /src/azure-cli/azure/cli/command_modules/vm/ @zhoxing-ms @jsntcy @wangzelin007 @yanzhudd
 /src/azure-cli/azure/cli/command_modules/staticwebapp/ @strawnsc
+/src/azure-cli/azure/cli/command_modules/logicapp/ @strawnsc

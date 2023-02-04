@@ -3,6 +3,7 @@
 # Licensed under the MIT License. See License.txt in the project root for license information.
 # --------------------------------------------------------------------------------------------
 
+OS_TYPES = ['Windows', 'Linux']
 LINUX_RUNTIMES = ['dotnet', 'node', 'python', 'java']
 WINDOWS_RUNTIMES = ['dotnet', 'node', 'java', 'powershell']
 
@@ -61,3 +62,7 @@ SCALE_VALID_PARAMS = {
     "logicAppScaleLimit": "siteConfig.functionAppScaleLimit",
     "minimumElasticInstanceCount": "siteConfig.minimumElasticInstanceCount"
 }
+
+APPSETTINGS_TO_MASK = ['DOCKER_REGISTRY_SERVER_PASSWORD']
+
+MULTI_CONTAINER_TYPES = ['COMPOSE', 'KUBE']

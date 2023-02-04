@@ -6,7 +6,6 @@
 from azure.cli.core import AzCommandsLoader
 
 import azure.cli.command_modules.appservice._help  # pylint: disable=unused-import
-import azure.cli.command_modules.appservice.logicapp._help  # pylint: disable=unused-import
 
 
 class AppserviceCommandsLoader(AzCommandsLoader):

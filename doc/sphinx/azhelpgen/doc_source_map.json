@@ -78,5 +78,6 @@
     "util": "src/azure-cli/azure/cli/command_modules/util/_help.py",
     "vm": "src/azure-cli/azure/cli/command_modules/vm/_help.py",
     "vmss": "src/azure-cli/azure/cli/command_modules/vm/_help.py",
-    "staticwebapp": "src/azure-cli/azure/cli/command_modules/staticwebapp/_help.py"
+    "staticwebapp": "src/azure-cli/azure/cli/command_modules/staticwebapp/_help.py",
+    "logicapp": "src/azure-cli/azure/cli/command_modules/logicapp/_help.py"
 }

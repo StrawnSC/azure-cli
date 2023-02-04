@@ -2,20 +2,11 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License. See License.txt in the project root for license information.
 # --------------------------------------------------------------------------------------------
-from email import message
-import json
 import unittest
-from unittest import mock
 import os
-import time
-import tempfile
-import requests
-import datetime
 
-from azure.cli.testsdk.scenario_tests import AllowLargeResponse, record_only
-from azure.cli.testsdk import (ScenarioTest, LocalContextScenarioTest, LiveScenarioTest, ResourceGroupPreparer,
-                               StorageAccountPreparer, JMESPathCheck, live_only)
-from azure.cli.testsdk.checkers import JMESPathPatternCheck
+from azure.cli.testsdk import (ScenarioTest, LiveScenarioTest, ResourceGroupPreparer, StorageAccountPreparer,
+                               JMESPathCheck)
 from msrestazure.tools import resource_id, parse_resource_id
 
 TEST_DIR = os.path.abspath(os.path.join(os.path.abspath(__file__), '..'))

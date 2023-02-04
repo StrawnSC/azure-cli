@@ -114,8 +114,6 @@ def load_command_table(self, _):
 
     appservice_domains = CliCommandType(operations_tmpl='azure.cli.command_modules.appservice.appservice_domains#{}')
 
-    logicapp_custom = CliCommandType(operations_tmpl='azure.cli.command_modules.appservice.logicapp.custom#{}')
-
     with self.command_group('webapp', webapp_sdk) as g:
         g.custom_command('create', 'create_webapp', exception_handler=ex_handler_factory(), validator=validate_vnet_integration)
         g.custom_command('up', 'webapp_up', exception_handler=ex_handler_factory(), validator=validate_webapp_up)
@@ -443,25 +441,3 @@ def load_command_table(self, _):
     with self.command_group('appservice domain', custom_command_type=appservice_domains, is_preview=True) as g:
         g.custom_command('create', 'create_domain')
         g.custom_command('show-terms', 'show_domain_purchase_terms')
-
-    with self.command_group('logicapp') as g:
-        g.custom_command('delete', 'delete_logic_app', confirmation=True)
-        g.custom_command('stop', 'stop_webapp')
-        g.custom_command('start', 'start_webapp')
-        g.custom_command('restart', 'restart_webapp')
-        g.generic_update_command('update', getter_name="get_functionapp", setter_name='set_functionapp', exception_handler=update_function_ex_handler_factory(),
-                                 custom_func_name='update_functionapp', getter_type=appservice_custom, setter_type=appservice_custom, command_type=webapp_sdk)
-
-    with self.command_group('logicapp', custom_command_type=logicapp_custom) as g:
-        g.custom_command('create', 'create_logicapp', exception_handler=ex_handler_factory())
-        g.custom_command('list', 'list_logicapp', table_transformer=transform_web_list_output)
-        g.custom_show_command('show', 'show_logicapp', table_transformer=transform_web_output)
-        g.custom_command('scale', 'scale_logicapp', exception_handler=ex_handler_factory())
-
-    with self.command_group('logicapp config appsettings', custom_command_type=logicapp_custom) as g:
-        g.custom_command('list', 'get_logicapp_app_settings', exception_handler=empty_on_404)
-        g.custom_command('set', 'update_logicapp_app_settings', exception_handler=ex_handler_factory())
-        g.custom_command('delete', 'delete_logicapp_app_settings', exception_handler=ex_handler_factory())
-
-    with self.command_group('logicapp deployment source') as g:
-        g.custom_command('config-zip', 'enable_zip_deploy_functionapp')
